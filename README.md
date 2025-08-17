@@ -1,5 +1,11 @@
 # 🚀 kraiser - KDE Application Launcher & Activator
 
+---
+
+⚡**TL;DR:** Add your apps to `~/.config/kraiser/apps.conf` and use a keyboard shortcut to launch or raise them instantly.
+
+---   
+
 ### 🧠 Launch an app if it’s not running, or bring it to the front if it is
 
 **kraiser** is a Bash script for KDE Plasma that opens an app if it’s not running—or brings it to the foreground if it is. No more extra clicks, wasted time, or window clutter.
