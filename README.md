@@ -19,7 +19,7 @@ Perfect for streamlining workflows, kraiser supports multiple app types (standar
 
 ## 🖥️ Desktop Compatibility
 
-`kraiser` is built specifically for **KDE Plasma** and depends on KDE tools like `kdotool` for window management and activation.
+**kraiser** is built specifically for **KDE Plasma** and depends on KDE tools like `kdotool` for window management and activation.
 
 ### 🧠 Note for GNOME Users
 
