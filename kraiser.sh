@@ -4,24 +4,9 @@
 # ℹ️ Requirements: This script needs 'kdotool'.
 # 📌 Install it with: sudo apt install kdotool (Debian/Ubuntu) | yay -S kdotool (Arch)
 
-# 🖥️ Keyboard Shortcuts in KDE:
-# To launch or activate an application with a key combination:
-# 1️⃣ Open System Settings → Keyboard → Keyboard Shortcuts.
-# 2️⃣ Click Add New → Command or URL.
-# 3️⃣ Enter the script path with the app identifier:
-#    ~/bin/kraiser kate.
-# 4️⃣ Assign a name to the shortcut (Example: 'Kate kraiser')
-# 5️⃣ Define the key combination in the Shortcuts tab and apply changes.
-
-# 🖥️ For GNOME:
-# The Happy Appy Hotkey extension is recommended:
-# 📌 https://extensions.gnome.org/extension/6057/happy-appy-hotkey/
-# 1️⃣ Install the extension from the GNOME Extensions page.
-# 2️⃣ Activate it and use the settings to add custom shortcuts.
-
 # ✅ Verify if `kdotool` is installed before running the script
 if ! command -v kdotool &>/dev/null; then
-    echo "❌ Error: 'kdotool' is not installed. Please install it for the script to work correctly."
+    echo "❌ Error: 'kdotool' is not installed. Please install it before using this script."
     exit 1
 fi
 
@@ -40,10 +25,17 @@ create_default_config() {
 # Format: apps["identifier"]="Window Name or Class Part|Executable Path|Associated Process Name"
 #
 # 'Window Name or Class Part' can be:
-#  - A distinctive part of the window title (e.g., "LibreOffice Writer" for dynamic titles)
-#  - The window class (WM_CLASS), which is often more stable (e.g., "konsole" for Konsole)
-#  - For Flatpak/Snap apps where WM_CLASS might not be consistently exposed,
-#    use a reliable part of the window title instead.
+#   - A distinctive part of the window title (e.g., "LibreOffice Writer" for dynamic titles)
+#   - The window class (WM_CLASS), which is often more stable (e.g., "konsole" for Konsole)
+#   - For Flatpak/Snap apps where WM_CLASS might not be consistently exposed,
+#     use a reliable part of the window title instead.
+#
+# You can generate a suggested template using:
+#   ./kraiser.sh --genconf
+#
+# You can list currently open windows with:
+#   ./kraiser.sh --list
+#
 
 # Example of a simple application using its class name
 apps["dolphin"]="Dolphin|/usr/bin/dolphin|dolphin"
@@ -71,8 +63,106 @@ if [[ ! -f "$APP_CONFIG_FILE" ]]; then
 fi
 
 # 📤 Load application definitions from the config file
-declare -A apps # Ensure the associative array is declared before sourcing
+declare -A apps
 source "$APP_CONFIG_FILE"
+
+# --- 📜 Subcommands for inspection ---
+case "$1" in
+    --list)
+        echo "🪟 Active windows detected:"
+        for W in $(kdotool search --all ""); do
+            TITLE=$(kdotool getwindowname "$W")
+            CLASS=$(kdotool getwindowclassname "$W")
+            PID=$(kdotool getwindowpid "$W")
+            PROC=$(ps -o comm= -p "$PID" 2>/dev/null)
+            printf 'ID: %s\n  Title: %s\n  Class: %s\n  PID: %s (%s)\n\n' \
+                "$W" "$TITLE" "$CLASS" "$PID" "$PROC"
+        done
+        exit 0
+        ;;
+
+    --genconf)
+        # Detect if stdout is a terminal
+        if [ -t 1 ]; then
+            YELLOW='\033[1;33m'
+            GREEN='\033[1;32m'
+            RESET='\033[0m'
+        else
+            YELLOW=''
+            GREEN=''
+            RESET=''
+        fi
+
+        echo -e "# 📑 Suggested template for ~/.config/kraiser/apps.conf"
+        echo -e "# ⚠ This is a guide / template. Review and copy the lines you want into your apps.conf"
+        echo -e "#   You may need to adjust window titles, identifiers, or executable paths!"
+        echo
+
+        declare -A NORMAL_APPS
+        declare -A PWAS
+
+        for W in $(kdotool search --all ""); do
+            WINDOW_TITLE=$(kdotool getwindowname "$W" 2>/dev/null)
+            WINDOW_CLASS=$(kdotool getwindowclassname "$W" 2>/dev/null)
+            PID=$(kdotool getwindowpid "$W" 2>/dev/null)
+            PROC=$(ps -o comm= -p "$PID" 2>/dev/null)
+            TITLE_ESC=$(echo "$WINDOW_TITLE" | sed 's/"/\\"/g')
+
+            # Detect FirefoxPWAs
+            if [[ "$PROC" =~ firefoxpwa ]] || ([[ "$PROC" =~ firefox ]] && [[ "$WINDOW_TITLE" =~ Web|YouTube|Instagram|GitHub|Google|Microsoft|Comparación|WhatsApp ]]); then
+                # Human-readable identifier: app name
+                IDENT=$(echo "$WINDOW_TITLE" | awk '{print tolower($1)}' | tr -cd '[:alnum:]')
+                # Extract pure ID: remove FFPWA- prefix
+                PWA_ID=$(echo "$WINDOW_CLASS" | tr -cd '[:alnum:]-' | sed 's/^FFPWA-//')
+                # Launch command
+                CMD="/usr/bin/firefoxpwa site launch $PWA_ID"
+                PWAS["$IDENT"]="$TITLE_ESC|$CMD|firefoxpwa"
+            else
+                IDENT=$(echo "$PROC" | tr '[:upper:]' '[:lower:]')
+                CMD="/usr/bin/$PROC"
+                NORMAL_APPS["$IDENT"]="$TITLE_ESC|$CMD|$PROC"
+            fi
+        done
+
+        # Print normal apps
+        echo -e "# Normal apps"
+        for K in $(printf "%s\n" "${!NORMAL_APPS[@]}" | sort); do
+            TITLE=$(echo "${NORMAL_APPS[$K]}" | cut -d'|' -f1)
+            EXEC=$(echo "${NORMAL_APPS[$K]}" | cut -d'|' -f2)
+            PROC=$(echo "${NORMAL_APPS[$K]}" | cut -d'|' -f3)
+            echo -e "${YELLOW}apps[\"$K\"]${RESET}=\"$TITLE|${GREEN}$EXEC${RESET}|$PROC\"  # You may need to change title, identifier, or path"
+            echo
+        done
+
+        echo
+        # Print FirefoxPWAs
+        echo -e "# FirefoxPWAs"
+        for K in $(printf "%s\n" "${!PWAS[@]}" | sort); do
+            TITLE=$(echo "${PWAS[$K]}" | cut -d'|' -f1)
+            EXEC=$(echo "${PWAS[$K]}" | cut -d'|' -f2)
+            PROC=$(echo "${PWAS[$K]}" | cut -d'|' -f3)
+            echo -e "${YELLOW}apps[\"$K\"]${RESET}=\"$TITLE|${GREEN}$EXEC${RESET}|$PROC\"  # You may need to change title, identifier, or path"
+            echo
+        done
+
+        exit 0
+        ;;
+
+    --help)
+        echo "Usage: $0 <app_identifier> [options]"
+        echo
+        echo "Launch an application if it's not running, or bring its window to the foreground."
+        echo
+        echo "Options:"
+        echo "  --list         List currently active windows with their IDs, titles, classes, and process names."
+        echo "  --genconf      Generate a suggested configuration template for ~/.config/kraiser/apps.conf."
+        echo "                 Extra tip: you can save the template directly to a file like this:"
+        echo "                     $0 --genconf > apps.conf"
+        echo "  --help         Show this help message and exit."
+        exit 0
+        ;;
+
+    esac
 
 # ✅ Validate the argument
 APP_KEY="$1"
@@ -98,36 +188,29 @@ if [[ -n "$CACHED_ID" && $(kdotool search | grep -w "$CACHED_ID") ]]; then
 fi
 
 # 🔍 Search for active window by matching process name AND (window title OR window class).
-WINDOW_ID="" # Reset WINDOW_ID for the actual search
+WINDOW_ID=""
 WINDOW_ID=$(kdotool search | while read id; do
     PID=$(kdotool getwindowpid "$id" 2>/dev/null)
     PROCESS_NAME=$(ps -p "$PID" -o args= | tr -d '\n' 2>/dev/null)
 
-    # Primary check: If the process name contains the target process name.
     if [[ "$PROCESS_NAME" == *"$APP_PROCESS"* ]]; then
         WINDOW_TITLE=$(kdotool getwindowname "$id" 2>/dev/null)
         WINDOW_CLASS=$(kdotool getwindowclass "$id" 2>/dev/null)
 
-        # Secondary check: Validate against window title or class.
-        # This is the critical part for distinguishing between multiple instances
-        # of the same process (like different Firefox PWAs), or for confirming
-        # the specific Flatpak instance.
         if [[ "$WINDOW_TITLE" =~ "$APP_NAME_OR_CLASS" || "$WINDOW_CLASS" =~ "$APP_NAME_OR_CLASS" ]]; then
             echo "$id"
-            break # Found a precise match, exit the loop
+            break
         fi
     fi
 done)
 
 if [ -n "$WINDOW_ID" ]; then
-    # 💾 Save the ID to RAM cache for quick future activations
     sed -i "/^$APP_KEY:/d" "$CACHE_FILE" 2>/dev/null
     echo "$APP_KEY:$WINDOW_ID" >> "$CACHE_FILE"
 
     kdotool windowactivate "$WINDOW_ID"
     echo "✔ Activating window and caching to RAM: $APP_NAME_OR_CLASS"
 else
-    echo "🚀 Lanzando $APP_NAME_OR_CLASS"
-    # Using array expansion for robust command execution
+    echo "🚀 Launching $APP_NAME_OR_CLASS"
     nohup "${APP_CMD_ARGS[@]}" >/dev/null 2>&1 &
 fi
