@@ -66,7 +66,7 @@ mkdir -p ~/.local/bin
 mv kraiser.sh ~/.local/bin/kraiser  # Rename to use 'kraiser' as a command
 ```
 
-Ensure that `~/bin` is in your `$PATH`. If not, you can add it to your `.bashrc` or `.zshrc`:
+Ensure that `~/.local/bin` is in your `$PATH`. If not, you can add it to your `.bashrc` or `.zshrc`:
 
 ```bash
 export PATH="$HOME/.local/bin:$PATH"
