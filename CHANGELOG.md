@@ -2,6 +2,53 @@
 
 This document outlines the significant changes and improvements made to the `kraiser` script across its development iterations.
 
+## v1.2 - 2025-08-17 (Subcommands & Configuration Guidance)
+
+This version introduces helpful guidance in the default configuration file and adds subcommands to inspect open windows, generate suggested configurations, and view usage help.
+
+### 🚀 Improvements
+
+* **Subcommands Added**:
+
+  * `--genconf` generates a suggested configuration template in `~/.config/kraiser/apps.conf` including example apps and guidance comments.
+
+  * `--list` enumerates currently open windows with details such as Window ID, Title, Class, PID, and Process Name. This helps users identify correct `APP_NAME_OR_CLASS` and `APP_PROCESS` for their custom configurations.
+
+  * `--help` displays a usage guide explaining how to launch applications, available subcommands, and an extra tip on redirecting the template to a file:
+  
+    ```bash
+    ./kraiser.sh --genconf > apps.conf
+    ```
+
+* **Configuration Guidance in `apps.conf`**:
+
+  * Added explanatory comments to guide users:
+
+    ```bash
+    # You can generate a suggested template using:
+    #   ./kraiser.sh --genconf
+    #
+    # You can list currently open windows with:
+    #   ./kraiser.sh --list
+    #
+    # You can view usage help with:
+    #   ./kraiser.sh --help
+    ```
+
+  * Preserved all previous examples for simple apps, Electron apps, Chromium and Firefox PWAs, and Flatpaks.
+
+* **Improved Readability**:
+
+  * Indentation and spacing standardized across the script and `--genconf` generation block.
+
+  * ANSI color variables (`YELLOW`, `GREEN`, `RESET`) clearly defined and used consistently in the output of `--genconf`.
+
+* **No Functional Changes**:
+
+  * All existing application launching and window activation logic remains unchanged.
+
+  * Only comments, subcommand support, and formatting were added for clarity and usability.
+
 ## v1.1 - 2025-08-17 (Enhanced Window Detection & Flatpak Support)
 
 This version focuses on improving the reliability of window detection, especially for applications like Flatpaks and Firefox PWAs.
