@@ -62,14 +62,14 @@ chmod +x kraiser.sh
 Move the script to your PATH (optional, but recommended):
 
 ```bash
-mkdir -p ~/bin
-mv kraiser.sh ~/bin/kraiser  # Rename to use 'kraiser' as a command
+mkdir -p ~/.local/bin
+mv kraiser.sh ~/.local/bin/kraiser  # Rename to use 'kraiser' as a command
 ```
 
 Ensure that `~/bin` is in your `$PATH`. If not, you can add it to your `.bashrc` or `.zshrc`:
 
 ```bash
-export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 source ~/.bashrc
 ```
 
