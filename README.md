@@ -110,25 +110,29 @@ apps["identifier"]="Window Name|Executable Path|Associated Process Name"
 ```
 
 - **identifier**: A unique, short key you will use in the kraiser command (e.g., `kraiser firefox`).
-- **Window Name**: The exact title or a significant part of the application's window title.
+- **Window Name or Class Part**: This is the key for finding your window. It can be:
+    * A **distinctive part of the window title** (e.g., "Writer" for "Document - LibreOffice Writer"). This is useful for applications with dynamic titles.
+    * The **Window Class (WM_CLASS)**, which is often a more stable identifier (e.g., "konsole" for Konsole, or "Navigator" for Firefox's main window class). Using the class is generally recommended for reliability.
 - **Executable Path**: The full path to the binary or command that initiates the application.
 - **Associated Process Name**: A distinctive part of the application's process name (you can find it by running `ps aux | grep <app_name>`).
 
 ### How to Find Window and Process Details in KDE
 
-To accurately configure new applications, you'll need to identify their Window Name, Executable Path, and Associated Process Name. KDE Plasma provides a helpful tool for this:
+To accurately configure new applications, you'll need to identify their **Window Name (or title part)**, **Window Class**, **Executable Path**, and **Associated Process Name**. KDE Plasma provides a helpful tool for this:
 
-1. Open the application you wish to configure (e.g., a new browser, game, or utility).
-2. Go to **System Settings → Window Management → Window Rules**.
-3. Click the **Add New...** button.
-4. In the **Window matching** tab, click the **Detect Window Properties** button (often represented by a crosshair icon).
-5. Click on the open application's window that you want to configure.
-6. A new window will appear, showing various properties of that window. You can find the **Window Class (role)** or **Window title** for your Window Name. For the Executable Path and Associated Process Name, look for properties related to the process or application name/command.
+1.  Open the application you wish to configure (e.g., a new browser, game, or utility).
+2.  Go to **System Settings → Window Management → Window Rules**.
+3.  Click the **"Add New..."** button.
+4.  In the "Window matching" tab, click the **"Detect Window Properties"** button (often represented by a crosshair icon).
+5.  Click on the open application's window that you want to configure.
+6.  A new window will appear, showing various properties of that window.
+    * For **`Window Name or Class Part`**: Look at **"Window title"** for dynamic parts or **"Window Class (role)"** (e.g., `konsole` or `Navigator`) for a more stable identifier. Choose the most reliable and specific part for your `apps.conf` entry.
+    * For **`Executable Path`** and **`Associated Process Name`**: You can often infer these from the application's name, but for exactness, open a terminal and run `ps aux | grep <name_of_the_app_guess>`. The first part of the output will show the process name, and you can usually find the full path there too.
 
 ### Default examples found in `apps.conf`
 
 ```bash
-# Example of a simple application
+# Example of a simple application using its class name
 apps["dolphin"]="Dolphin|/usr/bin/dolphin|dolphin"
 
 # Example of an Electron application
@@ -137,8 +141,13 @@ apps["crunchyroll"]="Crunchyroll|/usr/bin/crunchyroll|electron"
 # Example of a Chromium PWA (<profile-directory> <app ID>)
 apps["github"]="Github|/usr/bin/chromium --profile-directory=Default --app-id=hnpfjnhllnonngcglapefqaidbinmjnm|chromium"
 
-# Example of a Firefox PWA (replace <YOUR_PWA_ID> with the actual ID)
+# Example of a Firefox using a PWA a title part (replace <YOUR_PWA_ID> with the actual ID)
 apps["gmail"]="Gmail|/usr/bin/firefoxpwa site launch <YOUR_PWA_ID>|firefoxpwa"
+
+# Example of a Flatpak application. Use a part of its window title if WM_CLASS is empty or unreliable.
+apps["chatterino"]="Chatterino|flatpak run com.chatterino.chatterino|chatterino"
+
+# Add your custom applications below:
 
 ```
 
