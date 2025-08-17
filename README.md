@@ -1,22 +1,24 @@
 # 🚀 kraiser - KDE Application Launcher & Activator
 
-### 🧠 Launch an application if it's not running, or bring it to the foreground if it already is
+### 🧠 Launch an app if it’s not running, or bring it to the front if it is
 
-**kraiser** is a lightweight and efficient Bash script tailored for KDE Plasma users who want snappy control over their applications. It intelligently checks whether an app is already running—if not, it launches it; if yes, it brings the existing window to the front, saving you clicks and time.
+**kraiser** is a Bash script for KDE Plasma that opens an app if it’s not running—or brings it to the foreground if it is. No more extra clicks, wasted time, or window clutter.
 
-Perfect for streamlining workflows, kraiser supports multiple app types (standard, Electron, PWA, etc.) and is easily configurable via a simple `apps.conf` file.
+Built to streamline your workflow, kraiser supports a wide range of app types: standard desktop apps, Electron-based tools, PWAs (via Firefox or Chromium), and more. Configuration is simple and flexible through a single `apps.conf` file.
 
-Instead of cycling endlessly through windows with Alt+Tab, you can jump straight to your desired app using a custom keyboard shortcut—cleaner, faster, and more focused.
+Forget cycling endlessly through windows with Alt+Tab. With kraiser, you can jump straight to the app you need using a custom keyboard shortcut. Cleaner, faster, and more focused.
+
+**Just Run or Raise.**
 
 ## 🧩 Key Features
 
-- **Intelligent Application Management**: Identifies if an application is active and brings it to the foreground, or starts it if it's not.
-- **Rapid Activation**: Utilizes an in-memory RAM cache (`/dev/shm`) for near-instantaneous activation of already open windows.
-- **Versatile Support**: Works with virtually any application or window you want to manage, including:
-  - Traditional desktop applications (e.g., Konsole).
-  - Electron applications (e.g., Discord).
-  - PWAs (Progressive Web Apps) and browser-based tools.
-- **Optimized for KDE Plasma**: Designed to work optimally within the KDE desktop environment, leveraging `kdotool`.
+- 🖥️ **Run or Raise**: Opens an app if it’s not running—or brings it to the front if it is  
+- ⚡ **Fast Activation**: Uses in-memory RAM cache (`/dev/shm`) for near-instant response  
+- 🧩 **Versatile Support**: Works with desktop apps, Electron tools, PWAs, and more  
+- ⚙️ **Simple Configuration**: Manage apps easily via a single `apps.conf` file  
+- 🪟 **KDE-Optimized**: Built for KDE Plasma, leveraging `kdotool`  
+- ⌨️ **Keyboard-Friendly**: Integrates seamlessly with custom shortcuts
+
 
 ## 🖥️ Desktop Compatibility
 
@@ -71,19 +73,24 @@ export PATH="$HOME/bin:$PATH"
 source ~/.bashrc
 ```
 
+Test it!
+```bash
+kraiser dolphin
+```
+
 ## ⌨️ Usage with Keyboard Shortcuts in KDE Plasma
 
 kraiser shines when integrated with your KDE keyboard shortcuts to launch or activate your favorite applications with a single key combination.
 
 1. Open **System Settings → Keyboard → Keyboard Shortcuts**.
 2. Click **Add New → Command or URL**.
-3. Enter the full path to your script with the application identifier. For example, to launch Firefox:
+3. Enter the full path to your script with the application identifier. For example, to launch Dolphin:
 
    ```bash
-   ~/bin/kraiser firefox
+   ~/bin/kraiser dolphin
    ```
 
-4. Assign a descriptive name to the shortcut (e.g., Firefox kraiser).
+4. Assign a descriptive name to the shortcut (e.g., Dolphin kraiser).
 5. Define the key combination in the **Shortcuts** tab and apply the changes.
 
 ## ⚙️ Application Configuration
@@ -122,7 +129,7 @@ To accurately configure new applications, you'll need to identify their Window N
 
 ```bash
 # Example of a simple application
-apps["terminal"]="Konsole|/usr/bin/konsole|konsole"
+apps["dolphin"]="Dolphin|/usr/bin/dolphin|dolphin"
 
 # Example of an Electron application
 apps["crunchyroll"]="Crunchyroll|/usr/bin/crunchyroll|electron"
