@@ -1,6 +1,11 @@
 # 🚀 kraiser - KDE Application Launcher & Activator
 
-**kraiser** is a lightweight and efficient Bash script designed to enhance your workflow in KDE Plasma. Its primary function is simple yet powerful: **Launch an application if it's not running, or bring it to the foreground if it already is.**
+### 🧠 Launch an application if it's not running, or bring it to the foreground if it already is
+
+**kraiser** is a lightweight and efficient Bash script tailored for KDE Plasma users who want snappy control over their applications. It intelligently checks whether an app is already running—if not, it launches it; if yes, it brings the existing window to the front, saving you clicks and time.
+
+Perfect for streamlining workflows, kraiser supports multiple app types (standard, Electron, PWA, etc.) and is easily configurable via a simple `apps.conf` file.
+
 
 ## 🧩 Key Features
 
