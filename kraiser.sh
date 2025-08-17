@@ -40,7 +40,7 @@ create_default_config() {
 # Format: apps["identifier"]="Window Name|Executable Path|Associated Process Name"
 
 # Example of a simple application
-apps["terminal"]="Konsole|/usr/bin/konsole|konsole"
+apps["dolphin"]="Dolphin|/usr/bin/dolphin|dolphin"
 
 # Example of an Electron application
 apps["crunchyroll"]="Crunchyroll|/usr/bin/crunchyroll|electron"
