@@ -109,7 +109,7 @@ Edit `~/.config/kraiser/apps.conf` to define your applications. Each entry follo
 apps["identifier"]="Window Name|Executable Path|Associated Process Name"
 ```
 
-- **identifier**: A unique, short key you will use in the kraiser command (e.g., `kraiser firefox`).
+- **identifier**: A unique, short key you will use in the kraiser command (e.g., `firefox`).
 - **Window Name or Class Part**: This is the key for finding your window. It can be:
     * A **distinctive part of the window title** (e.g., "Writer" for "Document - LibreOffice Writer"). This is useful for applications with dynamic titles.
     * The **Window Class (WM_CLASS)**, which is often a more stable identifier (e.g., "konsole" for Konsole, or "Navigator" for Firefox's main window class). Using the class is generally recommended for reliability.
@@ -118,24 +118,50 @@ apps["identifier"]="Window Name|Executable Path|Associated Process Name"
 
 ### How to Find Window and Process Details in KDE
 
-#### 🧪 Use `kraiser --genconf` to extract config-ready info from open apps
+#### 🧪 Quick Method: Use `kraiser --genconf` to extract almost config-ready info from open apps
 
-Run `kraiser --genconf` to list currently open windows and generate config-ready lines you can copy directly into your `apps.conf`. It extracts key details—window title, class, executable path, and process name—making it easy to add new apps without digging through system tools.
+Run:
 
-#### 🛠️ Manual Method: Find Window and Process Details Yourself
+```
+kraiser --genconf
+```
+
+This will list currently open windows and generate **almost** config-ready lines you can copy directly into your `apps.conf`. You’ll usually need to adjust the window title or class to make it more reliable.
+
+💡 **Tip:** Redirect the output to a temporary file for easier copy-pasting:
+
+```
+kraiser --genconf > ~/apps.conf.suggested
+```
+
+Then open it, review, and selectively copy the entries you want into your real config at:
+
+```
+~/.config/kraiser/apps.conf
+```
+
+⚠️ **Do not redirect directly into `apps.conf`**, as this would overwrite your existing configuration.
+
+---
+
+#### 🛠️ Manual Method: KDE’s built-in tools
 
 Use this approach if you prefer to manually inspect window properties and process details. KDE Plasma provides built-in tools to help you identify the necessary information for your `apps.conf` entries.
 
 To accurately configure new applications, you'll need to identify their **Window Name (or title part)**, **Window Class**, **Executable Path**, and **Associated Process Name**. KDE Plasma provides a helpful tool for this:
 
-1.  Open the application you wish to configure (e.g., a new browser, game, or utility).
-2.  Go to **System Settings → Window Management → Window Rules**.
-3.  Click the **"Add New..."** button.
-4.  In the "Window matching" tab, click the **"Detect Window Properties"** button (often represented by a crosshair icon).
-5.  Click on the open application's window that you want to configure.
-6.  A new window will appear, showing various properties of that window.
-    * For **`Window Name or Class Part`**: Look at **"Window title"** for dynamic parts or **"Window Class (role)"** (e.g., `konsole` or `Navigator`) for a more stable identifier. Choose the most reliable and specific part for your `apps.conf` entry.
-    * For **`Executable Path`** and **`Associated Process Name`**: You can often infer these from the application's name, but for exactness, open a terminal and run `ps aux | grep <name_of_the_app_guess>`. The first part of the output will show the process name, and you can usually find the full path there too.
+1. Open the application you wish to configure (e.g., a new browser, game, or utility).  
+2. Go to **System Settings → Window Management → Window Rules**.  
+3. Click the **"Add New..."** button.  
+4. In the "Window matching" tab, click the **"Detect Window Properties"** button (magnifying glass icon).  
+5. Click on the open application's window you want to configure.  
+6. A window will appear showing various properties:
+    * **`Window Name or Class Part`**: Use the window title for dynamic parts or **Window Class (role)** for a more stable identifier (e.g., `konsole` or `Navigator`).  
+    * **`Executable Path`** and **`Associated Process Name`**: Often inferable from the app name, but for exactness, run in terminal:
+
+      ```
+      ps aux | grep <name_of_the_app_guess>
+      ```
 
 ### Default examples found in `apps.conf`
 
