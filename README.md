@@ -6,6 +6,7 @@
 
 Perfect for streamlining workflows, kraiser supports multiple app types (standard, Electron, PWA, etc.) and is easily configurable via a simple `apps.conf` file.
 
+Instead of cycling endlessly through windows with Alt+Tab, you can jump straight to your desired app using a custom keyboard shortcut—cleaner, faster, and more focused.
 
 ## 🧩 Key Features
 
