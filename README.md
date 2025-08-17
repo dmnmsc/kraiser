@@ -118,6 +118,14 @@ apps["identifier"]="Window Name|Executable Path|Associated Process Name"
 
 ### How to Find Window and Process Details in KDE
 
+#### 🧪 Use `kraiser --genconf` to extract config-ready info from open apps
+
+Run `kraiser --genconf` to list currently open windows and generate config-ready lines you can copy directly into your `apps.conf`. It extracts key details—window title, class, executable path, and process name—making it easy to add new apps without digging through system tools.
+
+#### 🛠️ Manual Method: Find Window and Process Details Yourself
+
+Use this approach if you prefer to manually inspect window properties and process details. KDE Plasma provides built-in tools to help you identify the necessary information for your `apps.conf` entries.
+
 To accurately configure new applications, you'll need to identify their **Window Name (or title part)**, **Window Class**, **Executable Path**, and **Associated Process Name**. KDE Plasma provides a helpful tool for this:
 
 1.  Open the application you wish to configure (e.g., a new browser, game, or utility).
