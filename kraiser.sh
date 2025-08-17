@@ -1,9 +1,8 @@
-
 #!/bin/bash
 # 🚀 Launch an application if it's not running, or bring it to the foreground if it already is
 
 # ℹ️ Requirements: This script needs 'kdotool'.
-# 📌 Install it with: sudo apt install kdotool (Debian/Ubuntu) | yay -S kdotool-git (Arch)
+# 📌 Install it with: sudo apt install kdotool (Debian/Ubuntu) | yay -S kdotool (Arch)
 
 # 🖥️ Keyboard Shortcuts in KDE:
 # To launch or activate an application with a key combination:
@@ -47,7 +46,7 @@ create_default_config() {
 #    use a reliable part of the window title instead.
 
 # Example of a simple application using its class name
-apps["dolphin"]="dolphin|/usr/bin/konsole|dolphin"
+apps["dolphin"]="Dolphin|/usr/bin/dolphin|dolphin"
 
 # Example of an Electron application
 apps["crunchyroll"]="Crunchyroll|/usr/bin/crunchyroll|electron"
