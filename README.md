@@ -1,4 +1,4 @@
-# 🚀 kraiser - KDE Application Launcher & Activator
+# 🚀 kraiser - KDE Wayland Application Launcher & Activator
 
 ---
 
@@ -8,7 +8,7 @@
 
 ### 🧠 Launch an app if it’s not running, or bring it to the front if it is
 
-**kraiser** is a Bash script for KDE Plasma that opens an app if it’s not running—or brings it to the foreground if it is. No more extra clicks, wasted time, or window clutter.
+**kraiser** is a **Bash script for KDE Plasma on Wayland** that opens an app if it’s not running—or brings it to the foreground if it is. No more extra clicks, wasted time, or window clutter.
 
 Built to streamline your workflow, kraiser supports a wide range of app types: standard desktop apps, Electron-based tools, PWAs (via Firefox or Chromium), and more. Configuration is simple and flexible through a single `apps.conf` file.
 
@@ -22,21 +22,13 @@ Forget cycling endlessly through windows with Alt+Tab. With kraiser, you can jum
 - ⚡ **Fast Activation**: Uses in-memory RAM cache (`/dev/shm`) for near-instant response  
 - 🧩 **Versatile Support**: Works with desktop apps, Electron tools, PWAs, and more  
 - ⚙️ **Simple Configuration**: Manage apps easily via a single `apps.conf` file  
-- 🪟 **KDE-Optimized**: Built for KDE Plasma, leveraging `kdotool`  
+- 🪟 **Wayland KDE Launcher**: Built for KDE Plasma, leveraging `kdotool`
 - ⌨️ **Keyboard-Friendly**: Integrates seamlessly with custom shortcuts
 
 
-## 🖥️ Desktop Compatibility
-
-**kraiser** is built specifically for **KDE Plasma** and depends on KDE tools like `kdotool` for window management and activation.
-
-### 🧠 Note for GNOME Users
-
-If you're using **GNOME** instead of KDE Plasma, there's a fantastic extension called [Happy Appy Hotkey](https://extensions.gnome.org/extension/6057/happy-appy-hotkey/) that offers a more complete and polished solution for launching and focusing applications via keyboard shortcuts. It's specifically designed for GNOME and performs this functionality even better than this script.
-
 ## 🛠️ Requirements
 
-- **kdotool**: This utility is essential for interacting with windows in KDE.
+   - **kdotool**: Essential dependency for `kraiser`. [Learn more](https://github.com/jinliu/kdotool) about this Wayland tool that lets you search, focus, and interact with application windows in KDE Plasma.
 
 ### Debian/Ubuntu
 
@@ -49,6 +41,10 @@ sudo apt install kdotool
 ```bash
 yay -S kdotool
 ```
+
+### 🧠 Note for GNOME Users
+
+If you're using **GNOME** instead of KDE Plasma, there's a fantastic extension called [Happy Appy Hotkey](https://extensions.gnome.org/extension/6057/happy-appy-hotkey/) that offers a more complete and polished solution for launching and focusing applications via keyboard shortcuts. It's specifically designed for GNOME and performs this functionality even better than this script.
 
 ## 📦 Installation
 
@@ -84,32 +80,16 @@ Test it!
 kraiser dolphin
 ```
 
-## ⌨️ Usage with Keyboard Shortcuts in KDE Plasma
-
-kraiser shines when integrated with your KDE keyboard shortcuts to launch or activate your favorite applications with a single key combination.
-
-1. Open **System Settings → Keyboard → Keyboard Shortcuts**.
-2. Click **Add New → Command or URL**.
-3. Enter the full path to your script with the application identifier. For example, to launch Dolphin:
-
-   ```bash
-   ~/bin/kraiser dolphin
-   ```
-
-4. Assign a descriptive name to the shortcut (e.g., Dolphin kraiser).
-5. Define the key combination in the **Shortcuts** tab and apply the changes.
-
 ## ⚙️ Application Configuration
 
-Application definitions are managed in a separate configuration file to allow for easy customization.
+**kraiser** automatically creates a default configuration file if it doesn't already exist. You can edit the main configuration at:
 
-### Configuration File Location
+```
+~/.config/kraiser/apps.conf
+```
 
-kraiser will automatically create a default configuration file at `~/.config/kraiser/apps.conf` if it doesn't already exist.
+Each entry should follow the format:
 
-### Configuration File Format
-
-Edit `~/.config/kraiser/apps.conf` to define your applications. Each entry follows the format:
 
 ```bash
 apps["identifier"]="Window Name|Executable Path|Associated Process Name"
@@ -128,7 +108,7 @@ apps["identifier"]="Window Name|Executable Path|Associated Process Name"
 
 Run:
 
-```
+```bash
 kraiser --genconf
 ```
 
@@ -191,7 +171,23 @@ apps["chatterino"]="Chatterino|flatpak run com.chatterino.chatterino|chatterino"
 
 ```
 
+## ⌨️ Usage with Keyboard Shortcuts in KDE Plasma
+
+kraiser shines when integrated with your KDE keyboard shortcuts to launch or activate your favorite applications with a single key combination.
+
+1. Open **System Settings → Keyboard → Keyboard Shortcuts**.
+2. Click **Add New → Command or URL**.
+3. Enter the full path to your script with the application identifier. For example, to launch Dolphin:
+
+   ```bash
+   ~/.local/bin/kraiser dolphin
+   ```
+
+4. Assign a descriptive name to the shortcut (e.g., Dolphin kraiser).
+5. Define the key combination in the **Shortcuts** tab and apply the changes.
+
+
 ## 🤔 Why kraiser?
 
-While you can launch applications directly with their command name, **kraiser** adds a layer of intelligence: it prevents multiple windows of the same app from cluttering your workspace and lets you instantly switch to the one you need. Instead of cycling endlessly through windows with Alt+Tab, you can jump straight to your desired app using a custom keyboard shortcut—cleaner, faster, and more focused.
+While you can launch applications directly with their command name, **kraiser** adds a layer of intelligence for **KDE Plasma on Wayland**: it prevents multiple windows of the same app from cluttering your workspace and lets you instantly switch to the one you need. Instead of cycling endlessly through windows with Alt+Tab, you can jump straight to your desired app using a custom **keyboard shortcut**—cleaner, faster, and more focused.
 
