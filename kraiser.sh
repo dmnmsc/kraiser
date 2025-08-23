@@ -66,6 +66,12 @@ fi
 declare -A apps
 source "$APP_CONFIG_FILE"
 
+# ℹ️ No arguments
+if [[ $# -eq 0 ]]; then
+    echo "ℹ️ No arguments provided: you can use '--genconf', '--list' or edit the apps.conf file manually."
+    exit 0
+fi
+
 # --- 📜 Subcommands for inspection ---
 case "$1" in
     --list)
