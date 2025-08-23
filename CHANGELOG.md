@@ -2,6 +2,20 @@
 
 This document outlines the significant changes and improvements made to the `kraiser` script across its development iterations.
 
+## v1.3 - 2025-08-23 (Argument Validation & Error Handling)
+
+This update improves script robustness by adding validation for missing arguments to prevent confusing error messages when running the script without parameters.
+
+### 🛠 Fixes
+
+- **Argument Validation Added**:  
+  Added a check for missing command-line arguments. If no argument is provided, the script now outputs an informative message guiding users to use `--genconf`, `--list`, or manually edit `apps.conf`.  
+  This prevents errors related to accessing undefined associative array keys and improves user experience.
+
+- **User Experience Improvement**:  
+  Clear and friendly messaging on missing arguments avoids sudden termination due to bash array indexing errors.  
+  Maintains script functionality for helper commands without unwanted errors.
+
 ## v1.2 - 2025-08-17 (Subcommands & Configuration Guidance)
 
 This version introduces helpful guidance in the default configuration file and adds subcommands to inspect open windows, generate suggested configurations, and view usage help.
