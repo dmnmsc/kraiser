@@ -115,7 +115,7 @@ case "$1" in
             TITLE_ESC=$(echo "$WINDOW_TITLE" | sed 's/"/\\"/g')
 
             # Detect FirefoxPWAs
-            if [[ "$PROC" =~ firefoxpwa ]] || ([[ "$PROC" =~ firefox ]] && [[ "$WINDOW_TITLE" =~ Web|YouTube|Instagram|GitHub|Google|Microsoft|Comparación|WhatsApp ]]); then
+            if [[ "$PROC" =~ firefoxpwa ]] || [[ "$PROC" =~ firefox ]]; then
                 # Human-readable identifier: app name
                 IDENT=$(echo "$WINDOW_TITLE" | awk '{print tolower($1)}' | tr -cd '[:alnum:]')
                 # Extract pure ID: remove FFPWA- prefix
