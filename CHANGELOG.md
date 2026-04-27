@@ -2,6 +2,11 @@
 
 This document outlines the significant changes and improvements made to the `kraiser` script across its development iterations.
 
+## v1.3.1 2026-04-27 (Better FirefoxPWA detection)
+
+Minor adjustment to improve FirefoxPWA detection with `--genconf` command.
+
+
 ## v1.3 - 2025-08-23 (Argument Validation & Error Handling)
 
 This update improves script robustness by adding validation for missing arguments to prevent confusing error messages when running the script without parameters.
