@@ -6,7 +6,7 @@
 
 ---   
 
-### 🧠 Launch an app if it’s not running, or bring it to the front if it is
+## 🧠 Launch an app if it’s not running, or bring it to the front if it is
 
 **kraiser** is a **Bash script for KDE Plasma on Wayland** that opens an app if it’s not running—or brings it to the foreground if it is. No more extra clicks, wasted time, or window clutter.
 
@@ -25,60 +25,88 @@ Forget cycling endlessly through windows with Alt+Tab. With kraiser, you can jum
 - 🪟 **Wayland KDE Launcher**: Built for KDE Plasma, leveraging `kdotool`
 - ⌨️ **Keyboard-Friendly**: Integrates seamlessly with custom shortcuts
 
+## 🧠 Note for GNOME Users
+
+If you're using **GNOME** instead of KDE Plasma, there's a fantastic extension called [Happy Appy Hotkey](https://extensions.gnome.org/extension/6057/happy-appy-hotkey/) that offers a more complete and polished solution for launching and focusing applications via keyboard shortcuts. It's specifically designed for GNOME and performs this functionality even better than this script.
 
 ## 🛠️ Requirements
 
    - **kdotool**: Essential dependency for `kraiser`. [Learn more](https://github.com/jinliu/kdotool) about this Wayland tool that lets you search, focus, and interact with application windows in KDE Plasma.
+   - **make**: Optional; needed only for the `make install`, `make update`, and `make uninstall` commands.
 
 ### Debian/Ubuntu
 
+Install `make` and `cargo`, then use Cargo to install `kdotool`:
+
 ```bash
-sudo apt install kdotool
+sudo apt install make cargo
+cargo install kdotool
+```
+
+Cargo installs the executable at `~/.cargo/bin/kdotool`. Make sure `~/.cargo/bin` is in your `PATH` so kraiser can run it. If needed, add this to your `~/.bashrc` or `~/.zshrc`:
+
+```bash
+export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
 ### Arch Linux
 
 ```bash
+sudo pacman -S make
 yay -S kdotool
 ```
 
-### 🧠 Note for GNOME Users
-
-If you're using **GNOME** instead of KDE Plasma, there's a fantastic extension called [Happy Appy Hotkey](https://extensions.gnome.org/extension/6057/happy-appy-hotkey/) that offers a more complete and polished solution for launching and focusing applications via keyboard shortcuts. It's specifically designed for GNOME and performs this functionality even better than this script.
-
 ## 📦 Installation
 
-Clone the repository:
+First, install the requirements (`make` and `kdotool`) listed in [Requirements](#️-requirements) above.
+If you choose not to install `make`, you can check the equivalent commands in the `Makefile` after cloning the repository.
+
+### Install kraiser
+
+Clone the repository and enter its directory:
 
 ```bash
 git clone https://github.com/dmnmsc/kraiser.git
 cd kraiser
 ```
 
-Make the script executable:
+Run the install target:
 
 ```bash
-chmod +x kraiser.sh
+make install
 ```
 
-Move the script to your PATH (optional, but recommended):
-
-```bash
-mkdir -p ~/.local/bin
-mv kraiser.sh ~/.local/bin/kraiser  # Rename to use 'kraiser' as a command
-```
-
-Ensure that `~/.local/bin` is in your `$PATH`. If not, you can add it to your `.bashrc` or `.zshrc`:
+This creates `~/.local/bin` if necessary and installs `kraiser.sh` as the executable `~/.local/bin/kraiser`. Make sure `~/.local/bin` is in your `PATH`; if it is not, add this to your `~/.bashrc` or `~/.zshrc`:
 
 ```bash
 export PATH="$HOME/.local/bin:$PATH"
-source ~/.bashrc
 ```
 
-Test it!
+Open a new terminal (or reload your shell configuration), then try it:
+
 ```bash
 kraiser dolphin
 ```
+
+### Update kraiser
+
+From the cloned repository directory, run:
+
+```bash
+make update
+```
+
+This pulls the latest changes from the repository and then runs the install target to refresh `~/.local/bin/kraiser`.
+
+### Uninstall kraiser
+
+From the cloned repository directory, run:
+
+```bash
+make uninstall
+```
+
+This removes the installed `~/.local/bin/kraiser` command. It does not remove the cloned repository or your configuration in `~/.config/kraiser`.
 
 ## ⚙️ Application Configuration
 
@@ -186,8 +214,27 @@ kraiser shines when integrated with your KDE keyboard shortcuts to launch or act
 4. Assign a descriptive name to the shortcut (e.g., Dolphin kraiser).
 5. Define the key combination in the **Shortcuts** tab and apply the changes.
 
+### Note about kdotool not being found in the KDE shortcut PATH
+
+The PATH for commands executed in KDE keyboard shortcuts isn't the same PATH you have in your shell — it's actually much more restricted:
+
+```
+# On Ubuntu
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+```
+
+So when you install kdotool via Cargo in your home folder, kraiser won't find it when called from global shortcuts. The solution for now is to create a wrapper script and call it instead of kraiser directly. For example, `~/.local/bin/kraiser_noshell`:
+
+```bash
+#!/bin/bash
+
+# kraiser expects us to set the kdotool path, which works in your shell because
+# your shell sets the cargo/bin paths, but KDE shortcuts do not, so we wrap kraiser here.
+env PATH="$HOME/.cargo/bin:$PATH" $HOME/.local/bin/kraiser "$@"
+```
+
+And in the keyboard shortcut command, use `~/.local/bin/kraiser_noshell dolphin`.
 
 ## 🤔 Why kraiser?
 
 While you can launch applications directly with their command name, **kraiser** adds a layer of intelligence for **KDE Plasma on Wayland**: it prevents multiple windows of the same app from cluttering your workspace and lets you instantly switch to the one you need. Instead of cycling endlessly through windows with Alt+Tab, you can jump straight to your desired app using a custom **keyboard shortcut**—cleaner, faster, and more focused.
-
