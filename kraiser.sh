@@ -1,10 +1,10 @@
 #!/bin/bash
 # 🚀 Launch an application if it's not running, or bring it to the foreground if it already is
 
-# ℹ️ Requirements: This script needs 'kdotool'.
-# 📌 Install it with: sudo apt install kdotool (Debian/Ubuntu) | yay -S kdotool (Arch)
+# ℹ️ Requirements: This script needs 'kdotool'. 
+# 📌 Install it with: cargo install kdotool (Debian/Ubuntu) | yay -S kdotool (Arch)
 
-# ✅ Verify if `kdotool` is installed before running the script
+# ✅ Verify if `kdotool` is installed before running the script.
 if ! command -v kdotool &>/dev/null; then
     echo "❌ Error: 'kdotool' is not installed. Please install it before using this script."
     exit 1
